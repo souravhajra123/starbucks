@@ -1,3 +1,4 @@
+//deploy with docker
 pipeline {
     agent any
     tools {
@@ -75,16 +76,10 @@ pipeline {
                 }
             }
         }
-        // Kubernetes Deployment Stage
-        stage('Deploy to Kubernetes') {
+        // docker stage
+        stage ("Deploy to Conatiner") {
             steps {
-                script {
-                    // Assuming you have set the Kubernetes credentials in Jenkins
-                    withKubeConfig(credentialsId: 'kubeconfig-credentials') {
-                        sh 'kubectl apply -f deployment.yaml'  // Apply your deployment YAML file
-                        sh 'kubectl rollout status deployment/starbucks' // Wait for deployment to complete
-                    }
-                }
+                sh 'docker run -d --name starbucks -p 3000:3000 amitsinghs98/starbucks:latest'
             }
         }
     }
